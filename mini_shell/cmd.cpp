@@ -3,19 +3,6 @@
 #include "cmdMgr.hh"
 
 
-void CmdBase::usage()
-{
-    std::cout << "cmd <option>" << std::endl;
-}
-
-
-bool inValidCmd::run(std::string& cmdStr, std::vector<std::string>& mdVec)
-{
-    std::cout << "invalid cmd!" << std::endl;
-    return true;
-}
-
-
 bool versionCmd::run(std::string& cmdStr, std::vector<std::string>& mdVec)
 {
     std::cout << "simuShell V1R1C00, yangyibo 00318985, 20161016" << std::endl;
@@ -68,14 +55,34 @@ bool promptCmd::run(std::string& cmdStr, std::vector<std::string>& mdVec)
 
 bool echoCmd::run(std::string& cmdStr, std::vector<std::string>& mdVec)
 {
+    if (1 == mdVec.size())
+    {
+        return false;
+    }
     std::cout << cmdStr.substr(cmdStr.find_first_of(" ") + 1) << std::endl;
     return true;
 }
 
 
+void echoCmd::usage(std::vector<std::string>& mdVec)
+{
+    std::cout << "echo <str>" << std::endl;
+}
+
+
 bool rmCmd::run(std::string& cmdStr, std::vector<std::string>& mdVec)
 {
+    if (1 == mdVec.size())
+    {
+        return false;
+    }
     system(cmdStr.c_str());
 
     return true;
+}
+
+
+void rmCmd::usage(std::vector<std::string>& mdVec)
+{
+    std::cout << "rm <files>" << std::endl;
 }

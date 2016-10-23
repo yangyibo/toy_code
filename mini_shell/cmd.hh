@@ -15,19 +15,10 @@ public:
     std::string cmdStr;
 
     virtual bool run(std::string& cmdStr, std::vector<std::string>& mdVec) = 0;
-    virtual void usage();
-
-};
-
-
-class inValidCmd: public CmdBase
-{
-public:
-    inValidCmd(){};
-    ~inValidCmd(){};
-
-    bool run(std::string& cmdStr, std::vector<std::string>& mdVec);
-    // void usage();
+    virtual void usage(std::vector<std::string>& mdVec)
+    {
+        std::cout << mdVec[0] << " <option>" << std::endl;
+    }
 };
 
 
@@ -38,7 +29,6 @@ public:
     ~versionCmd(){};
 
     bool run(std::string& cmdStr, std::vector<std::string>& mdVec);
-    // void usage();
 };
 
 
@@ -49,7 +39,6 @@ public:
     ~quitCmd(){};
 
     bool run(std::string& cmdStr, std::vector<std::string>& mdVec);
-    // void usage();
 };
 
 
@@ -60,7 +49,6 @@ public:
     ~helpCmd(){};
 
     bool run(std::string& cmdStr, std::vector<std::string>& mdVec);
-    // void usage();
 };
 
 
@@ -71,7 +59,7 @@ public:
     ~rmCmd(){};
 
     bool run(std::string& cmdStr, std::vector<std::string>& mdVec);
-    // void usage();
+    void usage(std::vector<std::string>& mdVec);
 };
 
 
@@ -82,7 +70,7 @@ public:
     ~echoCmd(){};
 
     bool run(std::string& cmdStr, std::vector<std::string>& mdVec);
-    // void usage();
+    void usage(std::vector<std::string>& mdVec);
 };
 
 
@@ -93,7 +81,6 @@ public:
     ~pwdCmd(){};
 
     bool run(std::string& cmdStr, std::vector<std::string>& mdVec);
-    // void usage();
 };
 
 
@@ -104,7 +91,6 @@ public:
     ~calcCmd(){};
 
     bool run(std::string& cmdStr, std::vector<std::string>& mdVec);
-    // void usage();
 };
 
 
@@ -115,7 +101,6 @@ public:
     ~promptCmd(){};
 
     bool run(std::string& cmdStr, std::vector<std::string>& mdVec);
-    // void usage();
 };
 
 

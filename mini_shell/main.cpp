@@ -1,34 +1,21 @@
-#include <iostream>
 #include "cmdMgr.hh"
 
-//std::string CmdBase::prompt = "HiShell@";
 
 int main(int argc, char const *argv[])
 {
-    CmdMgr cmdMgr;
+    std::map<std::string, CmdBase *> mapValidCmd;
+    
+    mapValidCmd.insert(std::pair<std::string, CmdBase *>("version", new versionCmd()));
+    mapValidCmd.insert(std::pair<std::string, CmdBase *>("prompt", new promptCmd()));
+    mapValidCmd.insert(std::pair<std::string, CmdBase *>("quit", new quitCmd()));
+    mapValidCmd.insert(std::pair<std::string, CmdBase *>("help", new helpCmd()));
+    mapValidCmd.insert(std::pair<std::string, CmdBase *>("rm", new rmCmd()));
+    mapValidCmd.insert(std::pair<std::string, CmdBase *>("echo", new echoCmd()));
+    mapValidCmd.insert(std::pair<std::string, CmdBase *>("pwd", new pwdCmd()));
+    mapValidCmd.insert(std::pair<std::string, CmdBase *>("calc", new calcCmd()));
 
-    while (true)
-    {
-        std::cout << cmdMgr.getPrompt() << " ";
-
-        char input[1024 + 1] = {0};
-        std::cin.getline(input, 1024);
-        //std::cout << "inputStr: " << inputStr << std::endl;
-
-        if (input[0] == 0)
-        {
-            continue;
-        }
-
-        std::string inputStr = input;
-
-        std::vector<std::string> cmdVec;
-        CmdBase* vd = cmdMgr.selectCmd(inputStr, cmdVec);
-        if (!vd->run(inputStr, cmdVec))
-        {
-            vd->usage();
-        }
-    }
+    CmdMgr cmdMgr(mapValidCmd);
+    cmdMgr.run();
 
     return 0;
 }

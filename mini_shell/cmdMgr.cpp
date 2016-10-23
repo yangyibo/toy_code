@@ -2,6 +2,13 @@
 #include "cmdMgr.hh"
 
 
+bool inValidCmd::run(std::string& cmdStr, std::vector<std::string>& mdVec)
+{
+    std::cout << "invalid cmd!" << std::endl;
+    return true;
+}
+
+
 void split(std::string& s, const std::string& delim, std::vector< std::string >* ret)
 {
     size_t last = 0;
@@ -26,16 +33,10 @@ void split(std::string& s, const std::string& delim, std::vector< std::string >*
 std::string CmdMgr::prompt = "HiShell@";
 
 
-CmdMgr::CmdMgr()
+CmdMgr::CmdMgr(std::map<std::string, CmdBase *> mapValidCmd)
 {
-    mapValidCmd.insert(std::pair<std::string, CmdBase *>("version", new versionCmd()));
-    mapValidCmd.insert(std::pair<std::string, CmdBase *>("prompt", new promptCmd()));
-    mapValidCmd.insert(std::pair<std::string, CmdBase *>("quit", new quitCmd()));
-    mapValidCmd.insert(std::pair<std::string, CmdBase *>("help", new helpCmd()));
-    mapValidCmd.insert(std::pair<std::string, CmdBase *>("rm", new rmCmd()));
-    mapValidCmd.insert(std::pair<std::string, CmdBase *>("echo", new echoCmd()));
-    mapValidCmd.insert(std::pair<std::string, CmdBase *>("pwd", new pwdCmd()));
-    mapValidCmd.insert(std::pair<std::string, CmdBase *>("calc", new calcCmd()));
+    this->mapValidCmd = mapValidCmd;
+    this->mapValidCmd.insert(std::pair<std::string, CmdBase *>("invalid", new inValidCmd()));
 }
 
 
@@ -49,7 +50,7 @@ CmdBase* CmdMgr::selectCmd(std::string& cmdStr, std::vector<std::string>& cmdVec
     }
     else
     {
-        return new inValidCmd();
+        return mapValidCmd["invalid"];
     }
 }
 
@@ -72,5 +73,31 @@ void CmdMgr::printVaildCmds()
     for (std::map<std::string, CmdBase *>::iterator it=mapValidCmd.begin(); it!=mapValidCmd.end(); ++it)
     {
         std::cout << it->first << std::endl;
+    }
+}
+
+
+void CmdMgr::run()
+{
+    while (true)
+    {
+        std::cout << getPrompt() << " ";
+
+        char input[1024 + 1] = {0};
+        std::cin.getline(input, 1024);
+
+        if (input[0] == 0)
+        {
+            continue;
+        }
+
+        std::string inputStr = input;
+
+        std::vector<std::string> cmdVec;
+        CmdBase* vd = selectCmd(inputStr, cmdVec);
+        if (!vd->run(inputStr, cmdVec))
+        {
+            vd->usage(cmdVec);
+        }
     }
 }

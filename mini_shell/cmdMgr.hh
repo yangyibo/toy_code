@@ -6,16 +6,28 @@
 #include "cmd.hh"
 
 
+class inValidCmd: public CmdBase
+{
+public:
+    inValidCmd(){};
+    virtual ~inValidCmd(){};
+
+    bool run(std::string& cmdStr, std::vector<std::string>& mdVec);
+};
+
+
 class CmdMgr
 {
 public:
-    CmdMgr();
-    ~CmdMgr(){};
+    CmdMgr(){};
+    CmdMgr(std::map<std::string, CmdBase *> mapValidCmd);
+    virtual ~CmdMgr(){};
 
-    CmdBase* selectCmd(std::string& cmdStr, std::vector<std::string>& mdVec);
+    virtual CmdBase* selectCmd(std::string& cmdStr, std::vector<std::string>& mdVec);
     void printVaildCmds();
     void setPrompt(std::string prompt);
     std::string getPrompt();
+    void run();
 
 private:
     std::map<std::string, CmdBase *> mapValidCmd;
